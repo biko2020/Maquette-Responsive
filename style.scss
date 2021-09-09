@@ -1,0 +1,113 @@
+//definir les variables gap,color,padding.
+
+$gap : 4vh;    //définir les espaces entre lignes et colonnes.
+$padding: 4vh; //l'écarts de remplissage des cotés du boite.
+$color:hsl(34, 85%, 52%);
+
+
+// definir les differents apparails utilisant SCSS map
+//nb: device [smart-phone, tablet, pc] sont des clés ces valeurs sont des pixels
+
+$device : (
+    smart-phone : 640px,
+    tablet : 768px,
+    pc: 1440px,
+);
+
+// difinir media queries, on utilisant Mixin
+// et une boucle pour interogie les device.
+
+// source:https://developer.mozilla.org/fr/docs/Glossary/Mixin
+//https://developer.mozilla.org/fr/docs/Glossary/Mixin
+
+@mixin find_device($type_device) {
+
+    @each $key, $value in $device {
+        //exemple : $device:($key [smart-phone]: $value[480px])
+
+        // definir le max-width
+
+        @if ($type_device == $key) { 
+        //si le type de device existe apporter sa valeur
+
+            @media (max-width: $value)
+            {
+                @content;
+            }
+        }
+        
+    }
+}
+
+// definir le style par deafut du browser.
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+    width:100%;
+    min-height: 100vh;
+
+    }
+
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column; // afficher en colonne
+    font-size: 32px;
+    gap:$gap;
+    padding: $padding;
+   
+  }
+
+[class^="block-"] {
+display: flex;
+flex-direction: row; // afficher en lignes
+gap: $gap; // creer des espaces entre lignes et colonnes
+
+}
+
+[class^='box-'] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1vh solid $color;
+    border-radius: 10px;
+}
+
+.box-header, .box-footer {
+    flex-basis: 100%;
+    height: 20vh;
+}
+.box-center {
+    flex-basis: 60%;
+    height: 60vh -$gap*2-$padding*2;
+}
+.box-left, .box-right {
+    flex-basis: 20%;
+}
+
+
+ // *** fonction Media queries ****
+
+ @include find_device(smart-phone){ // si device = smart-phone 
+    .block-body {
+        flex-direction: column; // afficher en colonnes selon le type de device
+        height: 60vh;
+    }
+     .box-left {
+         display: none;
+     }
+
+     .box-center {
+         flex-basis: 80%;
+     }
+  
+  }
